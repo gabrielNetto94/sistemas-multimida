@@ -32,6 +32,7 @@ div#main .topleft {
 	top: 0px;
 	left: 0px;
   background: red;
+  transform-origin: top left;
   transition: 1s;
 	
 }
@@ -44,6 +45,7 @@ div#main .topright {
 	top: 0px;
 	left: 100px;
 	background: yellow;
+	transform-origin: top right;
   transition: 1s;
 }
 
@@ -55,6 +57,7 @@ div#main .bottomleft {
 	left: 0px;
 	top: 100px;
   background: blue;
+  transform-origin: bottom left;
   transition: 1s;
 
 }
@@ -67,6 +70,7 @@ div#main .bottomright {
 	left: 100px;
 	top: 100px;
   background: green;
+  transform-origin: bottom right;
   transition: 1s;
 
 }
@@ -76,10 +80,10 @@ div#main:hover .topleft {
   transform: rotate(90deg);
 }
 div#main:hover .topright {
-  transform: rotate(90deg);
+  transform: rotate(-90deg);
 }
 div#main:hover .bottomleft {
-  transform: rotate(90deg);
+  transform: rotate(-90deg);
 }
 
 div#main:hover .bottomright {
