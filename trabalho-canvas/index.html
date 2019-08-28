@@ -1,49 +1,82 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<script type="text/javascript" src="js.js"></script>
+	<head>		
+		<meta charset="utf-8">
 		<link rel = "stylesheet" type = "text/css" href = "style.css" />
-   
 	</head>
   <body>
-    <canvas id="myCanvas" width="700" height="450" style=""></canvas>
-	<br/>
-	
-	<script>
-			var canvas = document.getElementById("myCanvas");
-			var isPressed = false;
-			var ctx = canvas.getContext("2d");			
-			
-			canvas.onmouseup = function (event){
-				isPressed = false;
-			}
+  	<script type="text/javascript" src="js.js"></script>
+    	<canvas id="myCanvas" width="700" height="450"></canvas>
+    <br>
+	<button onclick="changeColor('#ff0000')">Red</button>
+	<button onclick="changeColor('#00ff00')">Green</button>
+	<button onclick="changeColor('#0000ff')">Blue</button>
 
-			canvas.onmousedown = function(event){
-				isPressed = true;
-			}
 
-			canvas.onMouseDown = function(e){
-			isPressed = true;
-			// get mouse x and y coordinates
-			startPoint.x = e.offsetX;
-			startPoint.y = e.offsetY;
-			// begin context path
-			paintContext.beginPath();
-			paintContext.moveTo(startPoint.x, startPoint.y);
-		}
+	<button onclick="getBrush()">Pincel</button>
+	<button onclick="getErase()">Borracha</button>
 
-			var startPoint = { x:0, y:0 };
-			
-			canvas.onmousemove = function(event){
-				
-				if(isPressed === true){				
-					
-					ctx.lineTo(e.offsetX, e.offsetY);
-					//ctx.lineTo(event.pageX, event.pageY);
-					ctx.stroke();
-				}
-			}
 
-		</script>
+	<h3>Tamanho traço</h3>
+	<input id="slider" type="range" min="1" step="1" max="50" value="1">
+	<output id="output"></output>
+	<button onclick="changeLineSize()">slider</button>
+
   </body>
+  <script type="text/javascript">
+	/*
+	a) desenho livre, com troca do tamanho do traço
+	b) desenho de pelo menos 3 formas geométricas, podendo escolher a cor da linha e de preenchimento e a largura da linha
+	c) desenho de linhas, podendo escolher a cor da linha e a largura da mesma
+	d) troca de cores, tanto para o desenho quanto para o fundo
+	e) borracha
+	*/
+	var canvas = document.getElementById("myCanvas");
+	var isPressed = false;
+	var ctx = canvas.getContext("2d");
+
+
+	function startSetupCanvas(){
+		ctx.lineCap  = "round";	
+	}
+
+	var slider = document.getElementById("#slider");
+
+	canvas.onmouseup = function (event){
+		isPressed = false;
+		ctx.beginPath();
+	}
+
+	canvas.onmousedown = function(event){
+		isPressed = true;
+		ctx.moveTo(e.pageX, e.pageY);
+	}
+
+	canvas.onmousemove = function(event){
+		
+		if(isPressed === true){				
+			ctx.lineTo(event.pageX, event.pageY);
+			ctx.stroke();
+		}
+	}
+
+	function changeColor(color){	
+		ctx.strokeStyle = color;
+	}
+
+	function changeLineSize() {
+	   var val = document.getElementById("slider").value //gets the oninput value
+	   document.getElementById('output').innerHTML = val //displays this value to the html page
+	   ctx.lineWidth = val;
+	}
+
+	function getErase(){
+		ctx.strokeStyle = "#ffffff";
+	}
+
+	function getBrush(){
+		ctx.strokeStyle = "#000000";
+	}
+
+  </script>
 </html> 
