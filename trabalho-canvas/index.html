@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<script type="text/javascript" src="js.js"></script>
+		<link rel = "stylesheet" type = "text/css" href = "style.css" />
+   
+	</head>
+  <body>
+    <canvas id="myCanvas" width="700" height="450" style=""></canvas>
+	<br/>
+	
+	<script>
+			var canvas = document.getElementById("myCanvas");
+			var isPressed = false;
+			var ctx = canvas.getContext("2d");			
+			
+			canvas.onmouseup = function (event){
+				isPressed = false;
+			}
+
+			canvas.onmousedown = function(event){
+				isPressed = true;
+			}
+
+			canvas.onMouseDown = function(e){
+			isPressed = true;
+			// get mouse x and y coordinates
+			startPoint.x = e.offsetX;
+			startPoint.y = e.offsetY;
+			// begin context path
+			paintContext.beginPath();
+			paintContext.moveTo(startPoint.x, startPoint.y);
+		}
+
+			var startPoint = { x:0, y:0 };
+			
+			canvas.onmousemove = function(event){
+				
+				if(isPressed === true){				
+					
+					ctx.lineTo(e.offsetX, e.offsetY);
+					//ctx.lineTo(event.pageX, event.pageY);
+					ctx.stroke();
+				}
+			}
+
+		</script>
+  </body>
+</html> 
