@@ -3,38 +3,47 @@
 	<head>		
 		<meta charset="utf-8">
 		<link rel = "stylesheet" type = "text/css" href = "style.css" />
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	</head>
   <body>
   	<script type="text/javascript" src="js.js"></script>
-    	<canvas id="myCanvas" width="700" height="450"></canvas>
-    <br>
-	<button onclick="changeColor('#ff0000')">Red</button>
-	<button onclick="changeColor('#00ff00')">Green</button>
-	<button onclick="changeColor('#0000ff')">Blue</button>
-
-
-	<button onclick="getBrush()">Pincel</button>
+	<canvas id="myCanvas" width="700" height="450"></canvas><br>
+	
+	<h3>Cor pincel</h3>
+	<button onclick="changeColor('#ff0000')" class="btn btn-danger">Red</button>
+	<button onclick="changeColor('#00ff00')" class="btn btn-success">Green</button>
+	<button onclick="changeColor('#0000ff')" class="btn btn-primary">Blue</button>
+	<button onclick="getBrush()" class="btn btn-dark">Pincel</button>
 	<button onclick="getErase()">Borracha</button>
 
-
 	<h3>Tamanho traço</h3>
-	<input id="slider" type="range" min="1" step="1" max="50" value="1">
+	<input id="slider" type="range" min="1" max="50" value="1" class="slider" id="myRange">
 	<output id="output"></output>
 	<button onclick="changeLineSize()">slider</button>
+	
+	<h3>Desenhar Linhas</h3>
+	<button onclick="drawLine()" class="btn btn-dark">Linha</button>
+		
+	<h3>Cor de fundo canvas</h3>
+	<input id="inputColor" type="color" name="favcolor" value="#ff0000">
+	<button onclick="changeBackgroundColorCanvas()" class="btn btn-dark">background</button>
 
   </body>
+  <style>#myCanvas { background-color: rgba(158, 167, 184, 0.2); }</style>
   <script type="text/javascript">
 	/*
-	a) desenho livre, com troca do tamanho do traço
+	OK a) desenho livre, com troca do tamanho do traço 
 	b) desenho de pelo menos 3 formas geométricas, podendo escolher a cor da linha e de preenchimento e a largura da linha
 	c) desenho de linhas, podendo escolher a cor da linha e a largura da mesma
-	d) troca de cores, tanto para o desenho quanto para o fundo
-	e) borracha
+	 d) troca de cores, tanto para o desenho quanto para o fundo
+	OK e) borracha
 	*/
 	var canvas = document.getElementById("myCanvas");
 	var isPressed = false;
 	var ctx = canvas.getContext("2d");
 
+	
+	
 
 	function startSetupCanvas(){
 		ctx.lineCap  = "round";	
@@ -49,19 +58,28 @@
 
 	canvas.onmousedown = function(event){
 		isPressed = true;
-		ctx.moveTo(e.pageX, e.pageY);
+		ctx.moveTo(event.clientX, event.clientY);
 	}
 
 	canvas.onmousemove = function(event){
 		
 		if(isPressed === true){				
-			ctx.lineTo(event.pageX, event.pageY);
+		 // ctx.lineTo(event.pageX, event.pageY);
+			ctx.lineTo(event.clientX, event.clientY);
 			ctx.stroke();
 		}
 	}
 
 	function changeColor(color){	
 		ctx.strokeStyle = color;
+	}
+
+	function changeBackgroundColorCanvas(){
+		//var colorInput =  document.getElementById("inputColor").value;				
+		alert(document.getElementById("myColor").value);
+		//canvas.style.backgroundColor = "red";
+		console.log(colorInput);
+		//canvas.style.backgroundColor = colorInput;
 	}
 
 	function changeLineSize() {
@@ -72,6 +90,7 @@
 
 	function getErase(){
 		ctx.strokeStyle = "#ffffff";
+		//ctx.strokeStyle = "black";//line color
 	}
 
 	function getBrush(){
