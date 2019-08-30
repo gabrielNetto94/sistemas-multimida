@@ -13,11 +13,11 @@
 	<button onclick="changeColor('#ff0000')" class="btn btn-danger">Red</button>
 	<button onclick="changeColor('#00ff00')" class="btn btn-success">Green</button>
 	<button onclick="changeColor('#0000ff')" class="btn btn-primary">Blue</button>
-	<button onclick="getBrush()" class="btn btn-dark">Pincel</button>
-	<button onclick="getErase()">Borracha</button>
+	<button onclick="useBrush()" class="btn btn-dark">Pincel</button>
+	<button onclick="useEraser()">Borracha</button>
 
 	<h3>Tamanho traço</h3>
-	<input id="slider" type="range" min="1" max="50" value="1" class="slider" id="myRange">
+	<input id="slider" type="range" min="1" max="50" value="25" class="slider" id="myRange">
 	<output id="output"></output>
 	<button onclick="changeLineSize()">slider</button>
 	
@@ -29,28 +29,28 @@
 	<button onclick="changeBackgroundColorCanvas()" class="btn btn-dark">background</button>
 
   </body>
-  <style>#myCanvas { background-color: rgba(158, 167, 184, 0.2); }</style>
   <script type="text/javascript">
 	/*
 	OK a) desenho livre, com troca do tamanho do traço 
 	b) desenho de pelo menos 3 formas geométricas, podendo escolher a cor da linha e de preenchimento e a largura da linha
 	c) desenho de linhas, podendo escolher a cor da linha e a largura da mesma
-	 d) troca de cores, tanto para o desenho quanto para o fundo
+ 	OK d) troca de cores, tanto para o desenho quanto para o fundo
 	OK e) borracha
 	*/
 	var canvas = document.getElementById("myCanvas");
-	var isPressed = false;
 	var ctx = canvas.getContext("2d");
-
-	
-	
-
-	function startSetupCanvas(){
-		ctx.lineCap  = "round";	
-	}
-
 	var slider = document.getElementById("#slider");
 
+	var isPressed = false;
+	
+	var eraser = {
+		colorEraser: "#ffffff",
+		use: false
+	}	
+	
+	ctx.lineCap  = "round";
+	
+	
 	canvas.onmouseup = function (event){
 		isPressed = false;
 		ctx.beginPath();
@@ -62,7 +62,6 @@
 	}
 
 	canvas.onmousemove = function(event){
-		
 		if(isPressed === true){				
 		 // ctx.lineTo(event.pageX, event.pageY);
 			ctx.lineTo(event.clientX, event.clientY);
@@ -75,11 +74,10 @@
 	}
 
 	function changeBackgroundColorCanvas(){
-		//var colorInput =  document.getElementById("inputColor").value;				
-		alert(document.getElementById("myColor").value);
-		//canvas.style.backgroundColor = "red";
-		console.log(colorInput);
-		//canvas.style.backgroundColor = colorInput;
+		var colorInput = document.getElementById("inputColor").value;
+		canvas.style.backgroundColor = colorInput;
+		eraser.colorEraser = colorInput;
+		//ctx.strokeStyle = colorEraser;//change color eraser
 	}
 
 	function changeLineSize() {
@@ -88,12 +86,12 @@
 	   ctx.lineWidth = val;
 	}
 
-	function getErase(){
-		ctx.strokeStyle = "#ffffff";
-		//ctx.strokeStyle = "black";//line color
+	function useEraser(){
+		
+		ctx.strokeStyle = eraser.colorEraser;
 	}
 
-	function getBrush(){
+	function useBrush(){
 		ctx.strokeStyle = "#000000";
 	}
 
