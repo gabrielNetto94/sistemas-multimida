@@ -10,26 +10,31 @@
 	<canvas id="myCanvas" width="700" height="450"></canvas><br>
 	
 	<h3>Cor pincel</h3>
-	<button onclick="changeColor('#ff0000')" class="btn btn-danger">Red</button>
-	<button onclick="changeColor('#00ff00')" class="btn btn-success">Green</button>
-	<button onclick="changeColor('#0000ff')" class="btn btn-primary">Blue</button>
-	<button onclick="useBrush()" class="btn btn-dark">Pincel</button>
-	<button onclick="useEraser()">Borracha</button>
+		<button onclick="changeColor('#ff0000')" class="btn btn-danger">Red</button>
+		<button onclick="changeColor('#00ff00')" class="btn btn-success">Green</button>
+		<button onclick="changeColor('#0000ff')" class="btn btn-primary">Blue</button>
+		<button onclick="useBrush()" class="btn btn-dark">Pincel</button>
+		<button onclick="useEraser()">Borracha</button>
 
 	<h3>Tamanho traço</h3>
-	<input id="slider" type="range" min="1" max="50" value="25" class="slider" id="myRange">
-	<output id="output"></output>
-	<button onclick="changeLineSize()">slider</button>
+		<input id="slider" type="range" min="1" max="50" value="25" class="slider" id="myRange">
+		<output id="output"></output>
+		<button onclick="changeLineSize()">Selecionar</button>
 	
 	<h3>Desenhar Linhas</h3>
-	<button onclick="drawLine()" class="btn btn-dark">Linha</button>
+		<button onclick="drawLine()" class="btn btn-dark">Linha</button>
 		
 	<h3>Cor de fundo canvas</h3>
-	<input id="inputColor" type="color" name="favcolor" value="#ff0000">
-	<button onclick="changeBackgroundColorCanvas()" class="btn btn-dark">background</button>
+		<input id="inputColor" type="color" name="favcolor" value="#ff0000">
+		<button onclick="changeBackgroundColorCanvas()" class="btn btn-dark">background</button>
 
-	<input type="checkbox" id="kare"><label for="kare">Kare</label>
-
+	<h3>Formas Geométricas</h3>
+		<form id="radioGroup">
+			<input type="radio" name="radioItem" id="square" value="square"><label>Quadrado</label><BR>
+			<input type="radio" name="radioItem" id="circle" value="circle"><label>Circulo</label><BR>
+			<input type="radio" name="radioItem" id="rectangle" value="rectangle"><label>Retângulo</label>
+		</form>
+	
   </body>
   <script type="text/javascript">
 	/*
@@ -40,15 +45,18 @@
 	OK e) borracha
 	*/
 
+        
 	//BEGIN TEST
-	var kareMi = false;
+	var square = false;
+	var circle = false;
 
 	//END TEST
 
 	var canvas = document.getElementById("myCanvas");
 	var ctx = canvas.getContext("2d");
 	var slider = document.getElementById("#slider");
-
+	var form = document.getElementById("radioGroup");
+		
 	var isPressed = false;
 	
 	var eraser = {
@@ -56,51 +64,102 @@
 		use: false
 	}		
 	
+	//setup canvas
 	ctx.lineCap  = "round";
-
-	//TEST	
 	var startPointX = 0;
 	var startPointY = 0;
-	//END TEST
-	
+
 	canvas.onmousedown = function(event){
 		isPressed = true;
-		ctx.moveTo(event.clientX, event.clientY);
+		
+		switch(form.elements["radioItem"].value) {//which option is selected
+			case "square":
+				square = document.getElementById("square").checked;
+				startPointX = event.offsetX;
+				startPointY = event.offsetY;
+				ctx.beginPath();
+				ctx.moveTo(startPointX, startPointY);
+			break;
+			
+			case "circle":
+				alert("circle");
+			break;
+			
+			case "rectangle":
+				alert("rectangle");
+			break;
 
-		//BEGIN TEST
-		kareMi = document.getElementById("kare").checked;
-		startPointX = event.pageX;
-		startPointY = event.pageY;
-		ctx.beginPath();
-		ctx.moveTo(startPointX, startPointY);
-		//END TEST
+			default:
+				ctx.moveTo(event.offsetX, event.offsetY);
+			}
 	}
 	
 	canvas.onmouseup = function (event){
 		isPressed = false;
-		ctx.beginPath();
 		
-		//BEGIN TEST
-		if(kareMi){
-			//canvas.width = canvas.width;
-			var width = event.offsetX - startPointX;
-			var height = event.offsetY - startPointY;
-			//ctx.fillRect(startPointX, startPointY, width, height);
-			ctx.strokeRect(startPointX, startPointY, width, height);
-			ctx.beginPath();
-		}
-		//END TEST
-	}
-
-	canvas.onmousemove = function(event){
-		if(kareMi){
+		switch (form.elements["radioItem"].value) {//which option is selected
+			case "square":
 				var width = event.offsetX - startPointX;
 				var height = event.offsetY - startPointY;
 				ctx.strokeRect(startPointX, startPointY, width, height);
+				ctx.beginPath();
+			break;
+			
+			case "circle":
+				alert("circle");
+			break;
+			
+			case "rectangle":
+				alert("rectangle");
+			break;
+
+			default:
+				ctx.moveTo(event.offsetX, event.offsetY);
+			}
+		
+		
+		/*
+		if(square){ 
+			var width = event.offsetX - startPointX;
+			var height = event.offsetY - startPointY;
+			ctx.strokeRect(startPointX, startPointY, width, height);
+			ctx.beginPath();
+		}
+		if(circle){
+			ctx.arc(100, 100, 50, 0, Math.PI * 2, true); // Círculo exterior
+		}*/
+	
+	}
+
+	canvas.onmousemove = function(event){
+		/*
+		switch (form.elements["radioItem"].value) {//which option is selected
+			case "square":
+				var width = event.offsetX - startPointX;
+				var height = event.offsetY - startPointY;
+				ctx.strokeRect(startPointX, startPointY, width, height);
+				ctx.beginPath();
+			break;
+			
+			case "circle":
+				alert("circle");
+			break;
+			
+			case "rectangle":
+				alert("rectangle");
+			break;
+
+			default:
+				ctx.moveTo(event.offsetX, event.offsetY);
+			}
+		*/
+		if(square){
+				//var width = event.offsetX - startPointX;
+				//var height = event.offsetY - startPointY;
+				//ctx.strokeRect(startPointX, startPointY, width, height);
 			}else{
 			if(isPressed){				
-			// ctx.lineTo(event.pageX, event.pageY);
-				ctx.lineTo(event.clientX, event.clientY);
+				ctx.lineTo(event.offsetX, event.offsetY);
 				ctx.stroke();
 			}
 		}
@@ -114,9 +173,9 @@
 	}
 
 	function changeLineSize() {
-	   var val = document.getElementById("slider").value //gets the oninput value
-	   document.getElementById('output').innerHTML = val //displays this value to the html page
-	   ctx.lineWidth = val;
+		var val = document.getElementById("slider").value //gets the oninput value
+		document.getElementById('output').innerHTML = val //displays this value to the html page
+	   	ctx.lineWidth = val;
 	}
 
 	function changeColor(color){	
