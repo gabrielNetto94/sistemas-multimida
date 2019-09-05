@@ -6,42 +6,38 @@
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	</head>
   <body>
-  	<script type="text/javascript" src="js.js"></script>
-	<canvas id="myCanvas" width="700" height="450"></canvas><br>
+	  <script type="text/javascript" src="javascript.js"></script>
+		<canvas id="myCanvas" width="700" height="450"></canvas><br>
+	<div id="leftSide">
+		<h3>Canvas</h3>
+			<form id="radioGroup">
+				<input type="radio" name="radioItem" id="brush" value="brush" checked><label>Pincel</label><br>
+				<input type="radio" name="radioItem" id="eraser" value="eraser"><label>Borracha</label><br>
+				<input type="radio" name="radioItem" id="line" value="line"><label>Linhas</label><br>
+				<input type="radio" name="radioItem" id="square" value="square"><label>Quadrado</label><BR>
+				<input type="radio" name="radioItem" id="circle" value="circle"><label>Circulo</label><BR>
+				<input type="radio" name="radioItem" id="rectangle" value="rectangle"><label>Retângulo</label>
+			</form>
+	</div>
 	
-	<h3>Canvas</h3>
-		<form id="radioGroup">
-			<input type="radio" name="radioItem" id="brush" value="brush" checked><label>Pincel</label><br>
-			<input type="radio" name="radioItem" id="eraser" value="eraser"><label>Borracha</label><br>
-			<input type="radio" name="radioItem" id="square" value="square"><label>Quadrado</label><BR>
-			<input type="radio" name="radioItem" id="circle" value="circle"><label>Circulo</label><BR>
-			<input type="radio" name="radioItem" id="rectangle" value="rectangle"><label>Retângulo</label>
-		</form>
+	<div id="rightSide">
+		<h3>Cor pincel</h3>
+			<button onclick="changeColor('#ff0000')" class="btn btn-danger">Red</button>
+			<button onclick="changeColor('#00ff00')" class="btn btn-success">Green</button>
+			<button onclick="changeColor('#0000ff')" class="btn btn-primary">Blue</button>
+			<button onclick="changeColor('#000000')" class="btn btn-dark">Black</button>
 
-	<h3>Cor pincel</h3>
-		<button onclick="changeColor('#ff0000')" class="btn btn-danger">Red</button>
-		<button onclick="changeColor('#00ff00')" class="btn btn-success">Green</button>
-		<button onclick="changeColor('#0000ff')" class="btn btn-primary">Blue</button>
-		<button onclick="changeColor('#000000')" class="btn btn-dark">Black</button>
-
-	<h3>Tamanho traço</h3>
-		<input id="slider" type="range" min="1" max="50" value="25" class="slider" id="myRange">
-		<output id="output"></output>
-		<button onclick="changeLineSize()">Selecionar</button>
-	
-	<h3>Cor de fundo canvas</h3>
-		<input id="inputColor" type="color" name="favcolor" value="#ff0000">
-		<button onclick="changeBackgroundColorCanvas()" class="btn btn-dark">background</button>
-
+		<h3>Tamanho traço</h3>
+			<input id="slider" type="number" min="1" max="50" value="1" class="slider" id="myRange">
+			<output id="output"></output>
+			<button onclick="changeLineSize()">Selecionar</button>
+		
+		<h3>Cor de fundo canvas</h3>
+			<input id="inputColor" type="color" name="favcolor" value="#ff0000">
+			<button onclick="changeBackgroundColorCanvas()" class="btn btn-dark">background</button>
+	</div>
   </body>
   <script type="text/javascript">
-	/*
-	OK a) desenho livre, com troca do tamanho do traço 
-	b) desenho de pelo menos 3 formas geométricas, podendo escolher a cor da linha e de preenchimento e a largura da linha
-	c) desenho de linhas, podendo escolher a cor da linha e a largura da mesma
- 	OK d) troca de cores, tanto para o desenho quanto para o fundo
-	OK e) borracha
-	*/
 
 	var canvas = document.getElementById("myCanvas");
 	var ctx = canvas.getContext("2d");
@@ -50,7 +46,7 @@
 		
 	var isPressed = false;
 		
-	//setup canvas
+	//canvas initial setting
 	ctx.lineCap  = "round";
 	var startPointX = 0;
 	var startPointY = 0;
@@ -59,7 +55,7 @@
 	canvas.onmousedown = function(event){
 		isPressed = true;
 		
-		switch(form.elements["radioItem"].value) {//which option is selected
+		switch(form.elements["radioItem"].value) {
 			case "square":
 				startPointX = event.offsetX;
 				startPointY = event.offsetY;
@@ -76,7 +72,9 @@
 			break;
 			
 			case "rectangle":
-				alert("rectangle");
+				ctx.beginPath();
+				ctx.rect(event.offsetX, event.offsetY, 150, 100);
+				ctx.stroke();
 			break;
 
 			case "brush":
@@ -91,6 +89,12 @@
 				ctx.moveTo(event.offsetX, event.offsetY);
 			break;
 
+			case "line":
+				ctx.beginPath();
+				ctx.strokeStyle = colorBrush;
+				ctx.moveTo(event.offsetX, event.offsetY);
+			break;
+
 			default:
 				ctx.beginPath();
 				ctx.moveTo(event.offsetX, event.offsetY);
@@ -99,18 +103,7 @@
 	
 	canvas.onmousemove = function(event){
 		
-		switch (form.elements["radioItem"].value) {//which option is selected
-			case "square":
-				
-			break;
-			
-			case "circle":
-				console.log("circle");
-			break;
-			
-			case "rectangle":
-				alert("rectangle");
-			break;
+		switch (form.elements["radioItem"].value) {
 
 			case "brush":
 				if(isPressed){				
@@ -126,7 +119,6 @@
 					ctx.lineTo(event.offsetX, event.offsetY);
 					ctx.stroke();
 				}
-				//ctx.strokeStyle = eraser.colorEraser;
 			break;
 			
 			default:
@@ -137,34 +129,22 @@
 	canvas.onmouseup = function (event){
 		isPressed = false;
 		
-		switch (form.elements["radioItem"].value) {//which option is selected
+		switch (form.elements["radioItem"].value) {
 			case "square":
 				var width = event.offsetX - startPointX;
 				var height = event.offsetY - startPointY;
 				ctx.strokeRect(startPointX, startPointY, width, height);
 				ctx.beginPath();
 			break;
-			
-			case "circle":
-				//ctx.arc(100, 100, 50, 0, Math.PI * 2, true); // Círculo exterior
-			break;
-			
-			case "rectangle":
-				alert("rectangle");
-			break;
 
-			case "brush":
-				//nothing
-			break;
-
-			case "eraser":
-				//nothing
+			case "line":
+				ctx.lineTo(event.offsetX, event.offsetY);
+				ctx.stroke();
 			break;
 
 			default:
 				
 			}
-		
 	}
 
 	function changeBackgroundColorCanvas(){
@@ -174,8 +154,7 @@
 	}
 
 	function changeLineSize() {
-		var val = document.getElementById("slider").value //gets the oninput value
-		document.getElementById('output').innerHTML = val //displays this value to the html page
+		var val = document.getElementById("slider").value
 	   	ctx.lineWidth = val;
 	}
 
