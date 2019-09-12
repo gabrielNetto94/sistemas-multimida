@@ -1,0 +1,34 @@
+1) Baixar o OpenCV para windows:
+	- Entrar em https://opencv.org/
+	- Releases
+	- Baixar a versão mais atual para windows
+	
+2) Instalar/Extrair em C:\
+
+3) Colocar o caminho C:\opencv\build\x64\vc15\bin nas variáveis de ambiente
+do windows:
+	- Botão direito em "Meu Computador" - Propriedades
+	- Na esquerda, ir em "Configurações Avançadas do Sistema"
+	- clicar em "Variáveis de Ambiente" em baixo
+	- Procurar nas "Variáveis do Sistema" a variável Path e clicar em "Editar..."
+	- Clicar em novo e colar o C:\opencv\build\x64\vc15\bin, Ok, Ok e Ok
+
+4) Pegar o arquivo opencv_world411d.dll na pasta C:\opencv\build\x64\vc15\bin e colar em:
+	- C:\Windows\System32
+	- C:\Windows\SysWOW64
+5) Abrir o Visual Studio e criar um novo projeto de aplicação "Visual C++" - "Projeto Vazio"
+
+6) Configurar o projeto:
+	- Clicar com o botão direito em cima do projeto e ir em Propriedades
+	- Certificar-se de que a Configuração está "Debug" e Plataforma está "x64"
+	- Na esquerda, ir em "Diretórios VC ++"
+	- Em "Diretórios de inclusão", adicionar o seguinte caminho:
+		C:\opencv\build\include
+		C:\opencv\build\include\opencv2
+	- Em "Diretórios de biblioteca adicionar os seguintes caminhos:
+		C:\opencv\build\x64\vc15\lib
+	- Na esquerda, clicar em "Vinculador - Entrada"
+		Em "Dependências Adicionais" adicionar o arquivo 
+
+7) Clicar com o botão direito no projeto - Adicionar - Novo Item
+	Arquivo do C++ (.cpp)
