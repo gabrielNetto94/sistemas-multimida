@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html>
+	<head>		
+		<meta charset="utf-8">
+		<link rel = "stylesheet" type = "text/css" href = "style.css" />
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	</head>
+  <body>
+	  <script type="text/javascript" src="javascript.js"></script>
+		<canvas id="myCanvas" width="700" height="450"></canvas><br>
+	<div id="leftSide">
+		<h3>Canvas</h3>
+			<form id="radioGroup">
+				<input type="radio" name="radioItem" id="brush" value="brush" checked><label>Pincel</label><br>
+				<input type="radio" name="radioItem" id="eraser" value="eraser"><label>Borracha</label><br>
+				<input type="radio" name="radioItem" id="line" value="line"><label>Linhas</label><br>
+				<input type="radio" name="radioItem" id="square" value="square"><label>Quadrado</label><BR>
+				<input type="radio" name="radioItem" id="circle" value="circle"><label>Circulo</label><BR>
+				<input type="radio" name="radioItem" id="rectangle" value="rectangle"><label>Retângulo</label>
+			</form>
+	</div>
+	
+	<div id="rightSide">
+		<h3>Cor pincel</h3>
+			<button onclick="changeColor('#ff0000')" class="btn btn-danger">Red</button>
+			<button onclick="changeColor('#00ff00')" class="btn btn-success">Green</button>
+			<button onclick="changeColor('#0000ff')" class="btn btn-primary">Blue</button>
+			<button onclick="changeColor('#000000')" class="btn btn-dark">Black</button>
+
+		<h3>Tamanho traço</h3>
+			<input id="slider" type="number" min="1" max="50" value="1" class="slider" id="myRange">
+			<output id="output"></output>
+			<button onclick="changeLineSize()">Selecionar</button>
+		
+		<h3>Cor de fundo canvas</h3>
+			<input id="inputColor" type="color" name="favcolor" value="#ff0000">
+			<button onclick="changeBackgroundColorCanvas()" class="btn btn-dark">background</button>
+	</div>
+  </body>
+  <script type="text/javascript">
+
+	var canvas = document.getElementById("myCanvas");
+	var ctx = canvas.getContext("2d");
+	var slider = document.getElementById("#slider");
+	var form = document.getElementById("radioGroup");
+		
+	var isPressed = false;
+		
+	//canvas initial setting
+	ctx.lineCap  = "round";
+	var startPointX = 0;
+	var startPointY = 0;
+	var colorBrush = "#000000";
+
+	canvas.onmousedown = function(event){
+		isPressed = true;
+		
+		switch(form.elements["radioItem"].value) {
+			case "square":
+				startPointX = event.offsetX;
+				startPointY = event.offsetY;
+				ctx.beginPath();
+				ctx.strokeStyle = colorBrush;
+				ctx.moveTo(startPointX, startPointY);
+			break;
+			
+			case "circle":
+				ctx.beginPath();
+				ctx.strokeStyle = colorBrush;
+				ctx.arc(event.offsetX, event.offsetY, 50, 0, 2 * Math.PI);
+				ctx.stroke();
+			break;
+			
+			case "rectangle":
+				ctx.beginPath();
+				ctx.rect(event.offsetX, event.offsetY, 150, 100);
+				ctx.stroke();
+			break;
+
+			case "brush":
+				ctx.strokeStyle = colorBrush;
+				ctx.beginPath();
+				ctx.moveTo(event.offsetX, event.offsetY);
+			break;
+
+			case "eraser":
+				ctx.strokeStyle = "#ffffff";
+				ctx.beginPath();
+				ctx.moveTo(event.offsetX, event.offsetY);
+			break;
+
+			case "line":
+				ctx.beginPath();
+				ctx.strokeStyle = colorBrush;
+				ctx.moveTo(event.offsetX, event.offsetY);
+			break;
+
+			default:
+				ctx.beginPath();
+				ctx.moveTo(event.offsetX, event.offsetY);
+			}
+	}
+	
+	canvas.onmousemove = function(event){
+		
+		switch (form.elements["radioItem"].value) {
+
+			case "brush":
+				if(isPressed){				
+					ctx.strokeStyle = colorBrush;
+					ctx.lineTo(event.offsetX, event.offsetY);
+					ctx.stroke();	
+				}
+			break;
+
+			case "eraser":
+				if(isPressed){				
+					ctx.strokeStyle = "#ffffff";
+					ctx.lineTo(event.offsetX, event.offsetY);
+					ctx.stroke();
+				}
+			break;
+			
+			default:
+				
+			}
+	}
+
+	canvas.onmouseup = function (event){
+		isPressed = false;
+		
+		switch (form.elements["radioItem"].value) {
+			case "square":
+				var width = event.offsetX - startPointX;
+				var height = event.offsetY - startPointY;
+				ctx.strokeRect(startPointX, startPointY, width, height);
+				ctx.beginPath();
+			break;
+
+			case "line":
+				ctx.lineTo(event.offsetX, event.offsetY);
+				ctx.stroke();
+			break;
+
+			default:
+				
+			}
+	}
+
+	function changeBackgroundColorCanvas(){
+		var colorInput = document.getElementById("inputColor").value;
+		canvas.style.backgroundColor = colorInput;
+		eraser.colorEraser = colorInput;
+	}
+
+	function changeLineSize() {
+		var val = document.getElementById("slider").value
+	   	ctx.lineWidth = val;
+	}
+
+	function changeColor(color){	
+		colorBrush = color;
+		ctx.strokeStyle = color;
+	}
+
+  </script>
+</html>
